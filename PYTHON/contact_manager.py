@@ -17,21 +17,29 @@ class ContactManager(contact.Contact):
         with open('info.csv', 'a', newline='') as fichier:
             writer = csv.writer(fichier)
             writer.writerow([self.nom, self.prenom, self.numero_de_telephone, self.adresse, self.e_mail])
-   
-
+            print("Contact ajouté avec succès!")
+            self.demararer()
+        
     def Read_contact(self):
         with open('info.csv', 'r') as fichier:
             contenu = fichier.read()
             print(contenu)
+            self.demararer()
 
     def deleted_contact(self):
+        self.supprimer = input('Voulez-vous supprimer les informations de qui ?')
+        self.donnees = []
         with open('info.csv', 'r') as fichier:
             self.contenus = fichier.read()
-            self.supprimer = input('Voulez-vous supprimer les informations de qui ?')
-            self.donnees = []
-            for contenu in self.contenus:
-                if self.supprimer != contenu[0]:
-                    self.donnees.append(contenu)
+            # for contenu in self.contenus:
+            self.donnees.append(contenu for contenu in self.contenus if not contenu[0] == self.supprimer)
+            with open('info.csv', 'w', newline='') as fichier:
+                writer = csv.writer(fichier)
+                writer.writerow(self.donnees)
+                print("Contact supprimé avec succès!")
+            self.demararer()
+                # if self.supprimer != contenu[0]:
+                #     self.donnees.append(contenu)
         with open('info.csv', 'w', newline='') as nouveau:
             new = csv.writer(nouveau)
             new.writerows(self.supprimer)
